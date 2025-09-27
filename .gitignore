@@ -1,6 +1,4 @@
-# -----------------------------
 # OS & editor cruft
-# -----------------------------
 .DS_Store
 Thumbs.db
 *.swp
@@ -13,9 +11,7 @@ Thumbs.db
 .idea/
 *.code-workspace
 
-# -----------------------------
 # Python build/runtime
-# -----------------------------
 __pycache__/
 *.py[cod]
 *.pyo
@@ -42,22 +38,16 @@ htmlcov/
 .tox/
 .cache/
 
-# -----------------------------
 # Notebooks
-# -----------------------------
 .ipynb_checkpoints/
 # Optional: keep notebooks but ignore their autosave checkpoints above
 
-# -----------------------------
 # Node / front-end (if any)
-# -----------------------------
 node_modules/
 npm-debug.log*
 yarn-error.log*
 
-# -----------------------------
 # Containers & orchestration
-# -----------------------------
 # Docker
 docker-compose.override.yml
 *.log
@@ -69,9 +59,7 @@ kubeconfig
 *.secret.yaml
 *.secret.yml
 
-# -----------------------------
 # Env & credentials
-# -----------------------------
 .env
 .env.*
 *.env
@@ -82,9 +70,7 @@ kubeconfig
 *.keystore
 *.tfvars
 
-# -----------------------------
 # Project outputs (renders, results, logs)
-# -----------------------------
 # Hands-off results & images
 results/
 S1/
@@ -106,18 +92,14 @@ ablation/
 logs/
 *.log
 
-# -----------------------------
 # MinIO / data artifacts (raw or derived)
-# -----------------------------
 data/
 datasets/
 training-data/
 scores/
 uploads/
 
-# -----------------------------
 # Kubernetes & Kind specific
-# -----------------------------
 # Kind cluster configurations (keep templates)
 *-cluster-config.yaml
 !kind-*-cluster.yaml
@@ -127,9 +109,7 @@ charts/*.tgz
 # kubectl temporary files
 kubectl-edit-*.yaml
 
-# -----------------------------
 # Local development & testing
-# -----------------------------
 # Test results and coverage
 .coverage
 coverage.xml
@@ -141,9 +121,7 @@ test-results/
 load-test-results/
 performance-results/
 
-# -----------------------------
 # Local tooling & IDE
-# -----------------------------
 # JetBrains
 .idea/
 *.iml

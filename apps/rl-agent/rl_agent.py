@@ -8,7 +8,7 @@ from kubernetes import client, config
 from collections import defaultdict
 from prometheus_client import Counter, Gauge, start_http_server
 
-# ========= Config (env) =========
+# Config (env)
 PROM_URL       = os.getenv("PROM_URL", "http://prometheus-operated:9090")
 NAMESPACE      = os.getenv("TARGET_NAMESPACE", "kubehealer")
 DEPLOYMENT     = os.getenv("TARGET_DEPLOYMENT", "etl-sim")
@@ -48,7 +48,7 @@ DOWN_P95_THRESH = float(os.getenv("DOWN_P95_THRESH", str(P95_SLO - 0.05)))  # e.
 STABLE_OK_TICKS = int(os.getenv("STABLE_OK_TICKS", "2"))
 COST_WEIGHT     = float(os.getenv("COST_WEIGHT", "0.2"))
 
-# ========= Logging =========
+# Logging
 def _setup_logger():
     log = logging.getLogger("kubehealer")
     log.setLevel(getattr(logging, LOG_LEVEL, logging.INFO))
@@ -68,7 +68,7 @@ def _setup_logger():
     return log
 log = _setup_logger()
 
-# ========= Prometheus metrics =========
+# Prometheus metrics
 ACTIONS = ["noop", "scale_up", "scale_down", "restart_one_pod", "reset_knobs"]
 if ENABLE_IMPUTE:
     ACTIONS += ["impute_on", "impute_off"]
@@ -86,7 +86,7 @@ masked_total       = Counter("kubehealer_masked_total", "Times action masking ap
 heal_success_total = Counter("kubehealer_heal_success_total", "Times an action cleared a flag", ["action","flag"])
 tick_seconds.set(TICK_S)
 
-# ========= PromQL helpers =========
+# PromQL helpers
 def q(prom_url, expr):
     try:
         r = requests.get(f"{prom_url}/api/v1/query", params={"query": expr}, timeout=5)
@@ -110,7 +110,7 @@ def read_signals(prom_url):
         "ml_flag":     int(q(prom_url, 'max without (job,instance,endpoint,service,pod) (ml_anomaly_flag)')),
     }
 
-# ========= Kubernetes helpers =========
+# Kubernetes helpers
 def init_kube():
     try: config.load_incluster_config()
     except: config.load_kube_config()
@@ -138,7 +138,7 @@ def restart_one_pod(ns, deploy):
     log.info("restarted_pod", extra={"kv":{"pod":pod}})
     return True
 
-# ========= Actuator =========
+# Actuator
 def _post(path, params):
     url = f"{ETL_ACT_URL}{path}"
     try:
@@ -189,7 +189,7 @@ def etl_impute(on=True):
     log.info("impute_toggle", extra={"kv":{"on":bool(on),"ok":ok}})
     return ok
 
-# ========= RL core =========
+# RL core
 class QAgent:
     def __init__(self, n_actions, alpha=0.4, gamma=0.95, eps=0.2, eps_min=0.05, eps_decay=0.999):
         self.Q = defaultdict(lambda: np.zeros(n_actions, dtype=np.float32))
@@ -206,7 +206,7 @@ class QAgent:
         self.eps = max(self.eps_min, self.eps * self.eps_decay)
         epsilon_gauge.set(self.eps)
 
-# ========= State / Reward =========
+# State / Reward
 def discretize(sig, replicas):
     return (
         int(sig["fail_rate"] > FAIL_SLO),
@@ -236,7 +236,7 @@ def reward_parts(sig, replicas):
         "flag": -1.0 * (sig["etl_flag"] or sig["ml_flag"]),
     }
 
-# ========= Actions =========
+# Actions
 def apply_action(a, replicas, now, last_scale_ts, last_act_ts):
     did = False
     did_reset = False
@@ -273,7 +273,7 @@ def choose_masked_action(agent, s, mask: set | None):
     if np.random.rand() < agent.eps: return int(np.random.choice(list(mask)))
     q = agent.Q[s]; return int(max(mask, key=lambda i: q[i]))
 
-# ========= Main =========
+# Main
 def main():
     start_http_server(METRICS_PORT)
     init_kube()
@@ -313,7 +313,7 @@ def main():
             else:
                 stable_ok = 0
 
-            # ---- masking (shielded RL) ----
+            # masking (shielded RL)
             mask = None; reason = None; now = time.time()
             if ENABLE_MASKING:
                 etl, ml, p95 = sig["etl_flag"], sig["ml_flag"], sig["p95_latency"]

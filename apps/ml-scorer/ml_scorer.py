@@ -14,7 +14,7 @@ from prometheus_client import start_http_server, Gauge, Counter
 
 APP = "ml-scorer"
 
-# ---- env ----
+# env
 MINIO_ENDPOINT = os.getenv("MINIO_ENDPOINT", "")
 MINIO_SECURE   = os.getenv("MINIO_SECURE", "false").lower() == "true"
 MINIO_ACCESS   = os.getenv("MINIO_ACCESS_KEY", "")
@@ -40,7 +40,7 @@ QUORUM_FRAC    = float(os.getenv("QUORUM_FRAC", "0.5"))
 ML_ANOM_CLEAR_WINDOWS = int(os.getenv("ML_ANOM_CLEAR_WINDOWS", "2"))
 ML_CLEAR_MULT         = float(os.getenv("ML_CLEAR_MULT", "0.6"))
 
-# ---- metrics ----
+# metrics
 PROB_AVG     = Gauge("ml_anom_prob_avg_observed", "avg ML anomaly prob in last scored file")
 FRAC_FLAG    = Gauge("ml_frac_flagged_observed",  "fraction flagged (ML) in last scored file")
 LAST_FILE_TS = Gauge("ml_last_file_unixts",       "unixtime of last scored file")
@@ -102,7 +102,7 @@ def run():
     last_key = None
     clf = None
 
-    # ---- latch state ----
+    # latch state
     ml_latched = False
     clean_streak = 0
 
@@ -151,7 +151,7 @@ def run():
             # Raw per-file ML decision via quorum
             ml_raw = (n_rec >= QUORUM_MIN_N) and (frac >= QUORUM_FRAC)
 
-            # ---- latch + clear-windows hysteresis ----
+            # latch + clear-windows hysteresis
             if not ml_latched:
                 if ml_raw:
                     ml_latched = True

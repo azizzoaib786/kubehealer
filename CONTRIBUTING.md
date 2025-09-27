@@ -7,7 +7,7 @@ Thank you for your interest in contributing to KubeHealer! We welcome contributi
 1. **Fork the repository**: [https://github.com/azizzoaib786/kubehealer](https://github.com/azizzoaib786/kubehealer)
 2. **Clone your fork**:
    ```bash
-   git clone https://github.com/yourusername/kubehealer.git
+   git clone https://github.com/azizzoaib786/kubehealer.git
    cd kubehealer
    ```
 3. **Set up the development environment**:

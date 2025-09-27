@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-# etl_sim_lite.py  — minimal ETL sim for ML/RL demos (sticky-flag fix + warmup)
+# etl_sim_lite.py — minimal ETL sim for ML/RL demos (sticky-flag fix + warmup)
 import os, json, time, random, threading, signal
 from datetime import datetime, timezone
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from prometheus_client import start_http_server, Counter, Gauge, Histogram
 
-# ---------- helpers ----------
+# helpers
 def _as_int(n, d):
     try: return int(os.getenv(n, str(d)))
     except: return d
@@ -18,7 +18,7 @@ def _clamp01(x):
     except:
         return 0.0
 
-# ---------- config (tiny) ----------
+# config (tiny)
 APP_NAME = os.getenv("APP_NAME","etl-sim-lite")
 METRICS_PORT = _as_int("METRICS_PORT", 8000)
 BATCH_SIZE = max(1, _as_int("BATCH_SIZE", 50))
@@ -56,7 +56,7 @@ MINIO_BUCKET     = os.getenv("MINIO_BUCKET","etl-bucket")
 MINIO_SECURE     = os.getenv("MINIO_SECURE","false").lower()=="true"
 MINIO_PREFIX     = os.getenv("MINIO_PREFIX","events")
 
-# ---------- metrics ----------
+# metrics
 RECORDS_IN   = Counter("etl_records_in_total",  "Total records in")
 RECORDS_OUT  = Counter("etl_records_out_total", "Total records out")
 RECORDS_FAIL = Counter("etl_records_failed_total","Total records failed")
@@ -74,7 +74,7 @@ MINIO_WRITES = Counter("etl_minio_writes_total","Total MinIO object writes")
 WINDOW_IN   = Gauge("etl_window_records_in", "Records seen in last heartbeat window")
 WINDOW_FAIL = Gauge("etl_window_records_failed", "Failed records in last heartbeat window")
 
-# ---------- state ----------
+# state
 _obs_in=_obs_fail=_obs_slow=0
 _w_obs=_w_anom=0
 _w_zmax=0.0
@@ -109,7 +109,7 @@ def _event():
         "z_temp": round(z,3)
     }
 
-# ---------- HTTP control ----------
+# HTTP control
 class Handler(BaseHTTPRequestHandler):
     def _ok(self, data):
         b=json.dumps(data).encode()
@@ -148,7 +148,7 @@ _stop=threading.Event()
 def _sig(*_): log("sigterm"); _stop.set()
 signal.signal(signal.SIGTERM,_sig); signal.signal(signal.SIGINT,_sig)
 
-# ---------- MinIO (optional) ----------
+# MinIO (optional)
 _minio = None
 def _init_minio():
     global _minio
@@ -173,7 +173,7 @@ def _write_minio(batch):
     MINIO_WRITES.inc()
     log("minio_write", key=key, count=len(batch))
 
-# ---------- main ----------
+# main
 def run():
     global _obs_in,_obs_fail,_obs_slow,_w_obs,_w_anom,_w_zmax,_anom_latched,_recent_ok
     threading.Thread(target=_start_http, daemon=True).start()
