@@ -1,0 +1,19 @@
+grafana:
+  adminUser: admin
+  adminPassword: admin@123
+  service:
+    type: ClusterIP
+  persistence:
+    enabled: false
+
+prometheus:
+  prometheusSpec:
+    retention: 12h
+    resources: {}
+    # Discover ServiceMonitors/PodMonitors across ALL namespaces
+    serviceMonitorSelectorNilUsesHelmValues: false
+    podMonitorSelectorNilUsesHelmValues: false
+    serviceMonitorSelector: {}
+    serviceMonitorNamespaceSelector: {}
+    podMonitorSelector: {}
+    podMonitorNamespaceSelector: {}

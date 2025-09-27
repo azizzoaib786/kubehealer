@@ -1,0 +1,11 @@
+grafana:
+  imageRenderer:
+    enabled: true
+    env:
+      ENABLE_CHROMIUM_SANDBOX: false
+      ENABLE_METRICS: true
+      
+  grafana.ini:
+    rendering:
+      server_url: http://kps-grafana-image-renderer.monitoring.svc.cluster.local:8081/render
+      callback_url: http://kps-grafana.monitoring.svc.cluster.local/

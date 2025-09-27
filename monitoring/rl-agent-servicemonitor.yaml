@@ -1,0 +1,18 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: rl-agent
+  namespace: monitoring
+  labels:
+    app: rl-agent
+spec:
+  namespaceSelector:
+    matchNames: ["kubehealer"]
+  selector:
+    matchLabels:
+      app: rl-agent
+  endpoints:
+    - port: metrics
+      path: /metrics
+      interval: 15s
+      scrapeTimeout: 3s

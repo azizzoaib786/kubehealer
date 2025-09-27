@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rl-agent
+  namespace: kubehealer
+  labels:
+    app: rl-agent
+spec:
+  replicas: 1
+  selector: 
+    matchLabels: 
+      app: rl-agent
+  template:
+    metadata:
+      labels:
+        app: rl-agent
+    spec:
+      serviceAccountName: rl-agent
+      containers:
+        - name: rl
+          image: kubehealer/rl-agent:0.8
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: PROM_URL
+              value: "http://kps-kube-prometheus-stack-prometheus.monitoring.svc:9090"
+            - name: TARGET_NAMESPACE
+              value: "kubehealer"
+            - name: TARGET_DEPLOYMENT
+              value: "etl-sim"
+            - name: ETL_ACT_URL
+              value: "http://etl-sim.kubehealer.svc:8080"
+            - name: METRICS_PORT
+              value: "8000"
+            - name: ENABLE_MASKING
+              value: "1"
+            - name: ENABLE_IMPUTE
+              value: "0"
+            - name: LOG_FORMAT
+              value: "json"
+            - name: PYTHONUNBUFFERED
+              value: "1"
+            - name: RESET_TTL_SECS
+              value: "180"
+            - name: DOWN_P95_THRESH
+              value: "2.1"
+            - name: STABLE_OK_TICKS
+              value: "2"
+            - name: COST_WEIGHT
+              value: "0.3"
+            - name: ALLOW_SCALE_ON_FLAGS
+              value: "1"
+          ports:
+            - name: metrics
+              containerPort: 8000

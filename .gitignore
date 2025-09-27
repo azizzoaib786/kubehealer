@@ -1,0 +1,169 @@
+# -----------------------------
+# OS & editor cruft
+# -----------------------------
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*.orig
+*.bak
+*.tmp
+~$*
+.vscode/
+.idea/
+*.code-workspace
+
+# -----------------------------
+# Python build/runtime
+# -----------------------------
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg
+*.egg-info/
+.eggs/
+dist/
+build/
+pip-wheel-metadata/
+wheelhouse/
+.venv/
+venv/
+env/
+ENV/
+.pytest_cache/
+.mypy_cache/
+.pyre/
+.pytype/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.cache/
+
+# -----------------------------
+# Notebooks
+# -----------------------------
+.ipynb_checkpoints/
+# Optional: keep notebooks but ignore their autosave checkpoints above
+
+# -----------------------------
+# Node / front-end (if any)
+# -----------------------------
+node_modules/
+npm-debug.log*
+yarn-error.log*
+
+# -----------------------------
+# Containers & orchestration
+# -----------------------------
+# Docker
+docker-compose.override.yml
+*.log
+
+# Kubernetes local configs / secrets (keep manifests under k8s/)
+kubeconfig
+.kube/
+.secrets/
+*.secret.yaml
+*.secret.yml
+
+# -----------------------------
+# Env & credentials
+# -----------------------------
+.env
+.env.*
+*.env
+*.key
+*.crt
+*.pem
+*.p12
+*.keystore
+*.tfvars
+
+# -----------------------------
+# Project outputs (renders, results, logs)
+# -----------------------------
+# Hands-off results & images
+results/
+S1/
+S2/
+S3/
+ablation/
+
+# Grafana PNG renders & temp exports
+*.png
+!docs/**/*.png           # allow images under docs/ if you keep figures there
+# If you want to commit only final figures, move them under docs/ before commit.
+
+# Run artifacts
+*.svg~
+*.pdf~
+*.out
+*.trace
+*.prof
+logs/
+*.log
+
+# -----------------------------
+# MinIO / data artifacts (raw or derived)
+# -----------------------------
+data/
+datasets/
+training-data/
+scores/
+uploads/
+
+# -----------------------------
+# Kubernetes & Kind specific
+# -----------------------------
+# Kind cluster configurations (keep templates)
+*-cluster-config.yaml
+!kind-*-cluster.yaml
+# Helm temporary files
+*.tgz
+charts/*.tgz
+# kubectl temporary files
+kubectl-edit-*.yaml
+
+# -----------------------------
+# Local development & testing
+# -----------------------------
+# Test results and coverage
+.coverage
+coverage.xml
+*.cover
+.hypothesis/
+pytest_cache/
+test-results/
+# Load testing results
+load-test-results/
+performance-results/
+
+# -----------------------------
+# Local tooling & IDE
+# -----------------------------
+# JetBrains
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# Vim/Neovim
+*.swp
+*.swo
+*~
+.netrwhist
+
+# Emacs
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+*.elc
+
+# VS Code workspace files (keep settings for contributors)
+*.code-workspace
+.vscode/launch.json
+.vscode/tasks.json

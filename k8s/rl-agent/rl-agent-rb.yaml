@@ -1,0 +1,13 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: rl-agent
+  namespace: kubehealer
+subjects:
+  - kind: ServiceAccount
+    name: rl-agent
+    namespace: kubehealer
+roleRef:
+  kind: Role
+  name: rl-agent
+  apiGroup: rbac.authorization.k8s.io

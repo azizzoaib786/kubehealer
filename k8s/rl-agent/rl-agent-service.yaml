@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: rl-agent
+  namespace: kubehealer
+  labels: 
+    app: rl-agent
+spec:
+  selector: 
+    app: rl-agent
+  ports:
+    - name: metrics
+      port: 8000
+      targetPort: metrics

@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: etl-sim
+  namespace: kubehealer
+  labels:
+    app: etl-sim
+spec:
+  selector:
+    app: etl-sim
+  ports:
+    - name: http
+      port: 8080
+      targetPort: http
+    - name: metrics
+      port: 8000
+      targetPort: metrics
+  type: ClusterIP

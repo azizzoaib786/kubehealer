@@ -1,0 +1,15 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: rl-agent
+  namespace: kubehealer
+rules:
+  - apiGroups: ["apps"]
+    resources: ["deployments/scale"]
+    verbs: ["get","patch","update"]
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["list","get","delete"]
+  - apiGroups: ["apps"]
+    resources: ["deployments"]
+    verbs: ["get"]

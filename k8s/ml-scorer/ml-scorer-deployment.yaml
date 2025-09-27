@@ -1,0 +1,74 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ml-scorer
+  namespace: kubehealer
+  labels:
+    app: ml-scorer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ml-scorer
+  template:
+    metadata:
+      labels:
+        app: ml-scorer
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9105"
+        prometheus.io/path: "/metrics"
+    spec:
+      containers:
+        - name: ml-scorer
+          image: kubehealer/ml-scorer:0.7
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: MINIO_ENDPOINT
+              value: "minio.minio.svc.cluster.local:9002"
+            - name: MINIO_SECURE
+              value: "false"
+            - name: MINIO_ACCESS_KEY
+              value: "minio"
+            - name: MINIO_SECRET_KEY
+              value: "minio123"
+            - name: MINIO_BUCKET
+              value: "etl-bucket"
+            - name: EVENTS_PREFIX
+              value: "events"
+            - name: SCORES_PREFIX
+              value: "training-data/scores"
+            - name: MODEL_PREFIX
+              value: "training-data/models"
+            - name: CITY_FILTER
+              value: ""        # set "dubai" to filter
+            - name: MIN_FIT
+              value: "100"
+            - name: MAX_BUF
+              value: "10000"
+            - name: PROB_THRESH
+              value: "0.55"
+            - name: POLL_SEC
+              value: "10"
+            - name: METRICS_PORT
+              value: "9105"
+            - name: FRAC_FLAG_THRESH
+              value: "0.10"
+            - name: ML_ANOMAL_CLEAR_WINDOWS
+              value: "2"
+            - name: ML_CLEAR_MULT
+              value: "0.6"
+            - name: QUORUM_FRAC
+              value: "0.25"
+            - name: QUORUM_MIN_N
+              value: "20" 
+          ports:
+            - name: metrics
+              containerPort: 9105
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "1"
+              memory: "512Mi"
